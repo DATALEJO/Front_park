@@ -32,6 +32,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Park Control", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue[900],
         actions: <Widget>[
           FlatButton(
             onPressed: () {

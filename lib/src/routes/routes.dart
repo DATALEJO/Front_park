@@ -12,10 +12,10 @@ import 'package:park_control/src/pages/register/regis_name_page.dart';
 Map<String, WidgetBuilder> getApplicationsRoutes(){
   return <String, WidgetBuilder>{
     '/': (BuildContext context) => MainPage(),
-    'register_name': (BuildContext context) => RegisterNamePage(),
+    'register_name': (BuildContext context) => RegisNameR(),
     'register_cedula': (BuildContext context) => RegisterIdPage(),
     'register_covconct': (BuildContext context) => RegisterCovidConctPage(),
-    'register_bday': (BuildContext context) => RegisterBday(),
+    'register_bday': (BuildContext context) => RegisterBdayPage(),
     'register_gender': (BuildContext context) => RegisterGenderPage(),
     'register_address': (BuildContext context) => RegisterAddressPage(),
     'register_email': (BuildContext context) => RegisterEmailPage(),

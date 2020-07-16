@@ -99,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
           TextFormField(
             controller: emailController,
             cursorColor: Colors.white,
-
             style: TextStyle(color: Colors.white70),
             decoration: InputDecoration(
               icon: Icon(Icons.account_circle, color: Colors.white70),
