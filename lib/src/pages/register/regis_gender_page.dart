@@ -4,6 +4,7 @@
 // the contents, whichever is biggest.
 
 import 'package:flutter/material.dart';
+import 'package:park_control/src/pages/register/regis_bday_page.dart';
 
 /// This is the stateless widget that the main application instantiates.
 class RegisterGenderPage extends StatelessWidget {
@@ -83,23 +84,31 @@ class Nameform extends StatefulWidget {
   _NameformState createState() => _NameformState();
 }
 
-class NamePagArguments {
-  final String name;
-  NamePagArguments(this.name);
+class GenderPagArguments {
+  final Map params;
+  GenderPagArguments(this.params);
 }
 
 class _NameformState extends State<Nameform> {
   final _formKey = GlobalKey<FormState>();
+  final genderController = TextEditingController();
+
+  @override
+  void dispose() {
+    genderController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final BDayPagArguments args = ModalRoute.of(context).settings.arguments;
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
           Container(
             margin: const EdgeInsets.only(left: 23.0, right: 23.0, top: 15.0),
-            child: TextFormField(
+            child: TextFormField(controller: genderController,
               decoration: InputDecoration(
                   labelText: 'Género'
               ),
@@ -128,7 +137,11 @@ class _NameformState extends State<Nameform> {
                   if (_formKey.currentState.validate()) {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
-                    Navigator.pushNamed(context,'register_address', arguments: NamePagArguments('Sebastian',),);
+                    print('PARAMS5: ${args.params}');
+                    print('TEXT: ${genderController.text}');
+                    Map newparams = args.params;
+                    newparams['gender'] = genderController.text;
+                    Navigator.pushNamed(context,'register_address', arguments: GenderPagArguments(newparams),);
                     Scaffold
                         .of(context)
                         .showSnackBar(SnackBar(content: Text('Procesando Información')));

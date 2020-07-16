@@ -4,6 +4,7 @@
 // the contents, whichever is biggest.
 
 import 'package:flutter/material.dart';
+import 'package:park_control/src/pages/register/regis_address_page.dart';
 
 /// This is the stateless widget that the main application instantiates.
 class RegisterEmailPage extends StatelessWidget {
@@ -83,23 +84,31 @@ class Nameform extends StatefulWidget {
   _NameformState createState() => _NameformState();
 }
 
-class NamePagArguments {
+class EmailPagArguments {
   final String name;
-  NamePagArguments(this.name);
+  EmailPagArguments(this.name);
 }
 
 class _NameformState extends State<Nameform> {
   final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final AddressPagArguments args = ModalRoute.of(context).settings.arguments;
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
           Container(
             margin: const EdgeInsets.only(left: 23.0, right: 23.0, top: 15.0),
-            child: TextFormField(
+            child: TextFormField(controller: emailController,
               decoration: InputDecoration(
                   labelText: 'Correo Electrónico'
               ),
@@ -128,7 +137,11 @@ class _NameformState extends State<Nameform> {
                   if (_formKey.currentState.validate()) {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
-                    Navigator.pushNamed(context,'register_cedula', arguments: NamePagArguments('Sebastian',),);
+                    print('PARAMS7: ${args.params}');
+                    print('TEXT: ${emailController.text}');
+                    Map newparams = args.params;
+                    newparams['email'] = emailController.text;
+                    print('ALLPARAMS: $newparams');
                     Scaffold
                         .of(context)
                         .showSnackBar(SnackBar(content: Text('Procesando Información')));

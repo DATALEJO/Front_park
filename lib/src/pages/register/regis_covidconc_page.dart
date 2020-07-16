@@ -4,6 +4,7 @@
 // the contents, whichever is biggest.
 
 import 'package:flutter/material.dart';
+import 'package:park_control/src/pages/register/regis_id_page.dart';
 
 /// This is the stateless widget that the main application instantiates.
 class RegisterCovidConctPage extends StatelessWidget {
@@ -83,23 +84,32 @@ class Nameform extends StatefulWidget {
   _NameformState createState() => _NameformState();
 }
 
-class NamePagArguments {
-  final String name;
-  NamePagArguments(this.name);
+class covContPagArguments {
+  final Map params;
+  covContPagArguments(this.params);
 }
 
 class _NameformState extends State<Nameform> {
   final _formKey = GlobalKey<FormState>();
+  final covContController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    covContController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final IdPagArguments args = ModalRoute.of(context).settings.arguments;
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
           Container(
             margin: const EdgeInsets.only(left: 23.0, right: 23.0, top: 15.0),
-            child: TextFormField(
+            child: TextFormField(controller: covContController,
               decoration: InputDecoration(
                   labelText: '¿Ha tenido contácto cercano al covid?'
               ),
@@ -128,7 +138,11 @@ class _NameformState extends State<Nameform> {
                   if (_formKey.currentState.validate()) {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
-                    Navigator.pushNamed(context,'register_bday', arguments: NamePagArguments('Sebastian',),);
+                    print('PARAMS3: ${args.params}');
+                    print('TEXT: ${covContController.text}');
+                    Map newparams = args.params;
+                    newparams['covid_contact'] = covContController.text;
+                    Navigator.pushNamed(context,'register_bday', arguments: covContPagArguments(newparams),);
                     Scaffold
                         .of(context)
                         .showSnackBar(SnackBar(content: Text('Procesando Información')));

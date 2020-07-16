@@ -91,6 +91,14 @@ class NamePagArguments {
 
 class _NameformState extends State<Nameform> {
   final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +108,7 @@ class _NameformState extends State<Nameform> {
         children: <Widget>[
           Container(
             margin: const EdgeInsets.only(left: 23.0, right: 23.0, top: 15.0),
-            child: TextFormField(
+            child: TextFormField(controller: nameController,
               decoration: InputDecoration(
                   labelText: 'Nombre'
               ),
@@ -129,7 +137,7 @@ class _NameformState extends State<Nameform> {
                   if (_formKey.currentState.validate()) {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
-                    Navigator.pushNamed(context,'register_cedula', arguments: NamePagArguments('Sebastian',),);
+                    Navigator.pushNamed(context,'register_cedula', arguments: NamePagArguments(nameController.text),);
                     Scaffold
                         .of(context)
                         .showSnackBar(SnackBar(content: Text('Procesando Información')));
@@ -141,7 +149,6 @@ class _NameformState extends State<Nameform> {
           )
         ],
       ),
-
     );
   }
 }
