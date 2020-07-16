@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:park_control/src/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'main.dart';
@@ -39,13 +40,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   signIn(String email, pass) async {
+    final APIURLBASE = 'http://datalejo.com:8005/';
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {
       'username': email,
       'password': pass
     };
     var jsonResponse = null;
-    var response = await http.post("https://inspection2drone.herokuapp.com/api/v1.0/auth/obtain_token/", body: data);
+    var response = await http.post('$APIURLBASE/auth/obtain_token/', body: data);
     if(response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       if(jsonResponse != null) {
@@ -53,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
         sharedPreferences.setString("token", jsonResponse['token']);
+        sharedPreferences.setString("APIURLBASE", APIURLBASE);
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainPage()), (Route<dynamic> route) => false);
       }
     }
