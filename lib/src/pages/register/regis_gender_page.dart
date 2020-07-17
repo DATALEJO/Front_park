@@ -140,7 +140,7 @@ class _NameformState extends State<Nameform> {
                     print('PARAMS5: ${args.params}');
                     print('TEXT: ${genderController.text}');
                     Map newparams = args.params;
-                    newparams['gender'] = genderController.text;
+//                    newparams['gender'] = genderController.text;
                     Navigator.pushNamed(context,'register_address', arguments: GenderPagArguments(newparams),);
                     Scaffold
                         .of(context)

@@ -140,7 +140,7 @@ class _NameformState extends State<Nameform> {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
                     print('PARAMS1: ${idController.text}');
-                    Navigator.pushNamed(context,'register_covconct', arguments: IdPagArguments({'name':args.name,'dni':idController.text}),);
+                    Navigator.pushNamed(context,'register_covconct', arguments: IdPagArguments({'name':args.name,'cedula':idController.text}),);
                     Scaffold
                         .of(context)
                         .showSnackBar(SnackBar(content: Text('Procesando Información')));

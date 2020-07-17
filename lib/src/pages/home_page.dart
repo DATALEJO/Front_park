@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Park Control", style: TextStyle(color: Colors.white)),
+        title: Text("Visitor Control", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue[900],
         actions: <Widget>[
           FlatButton(
@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
               sharedPreferences.commit();
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
             },
-            child: Text("Log Out", style: TextStyle(color: Colors.white)),
+            child: Text("Salir", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

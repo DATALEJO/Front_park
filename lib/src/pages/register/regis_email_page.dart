@@ -3,8 +3,12 @@
 // In this example, the column becomes either as big as viewport, or as big as
 // the contents, whichever is biggest.
 
+import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:park_control/src/pages/register/regis_address_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 /// This is the stateless widget that the main application instantiates.
 class RegisterEmailPage extends StatelessWidget {
@@ -89,14 +93,38 @@ class EmailPagArguments {
   EmailPagArguments(this.name);
 }
 
+
+
 class _NameformState extends State<Nameform> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
     emailController.dispose();
     super.dispose();
+  }
+
+  registerVisitor(Map dataVisitor, BuildContext context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final token = sharedPreferences.getString('token');
+    final APIURLBASE = sharedPreferences.getString('APIURLBASE');
+    var jsonResponse = null;
+    print('Entra a registrar');
+    var response = await http.post('$APIURLBASE/api/v1.0/visitors/', body: dataVisitor, headers: {
+      'Accept': 'application/json',
+      'Authorization': 'JWT $token'
+    });
+    if(response.statusCode == 201) {
+      jsonResponse = json.decode(response.body);
+      if(jsonResponse != null) {
+        Navigator.pushNamed(context,'register_done');
+      }
+    }
+    else {
+      print(response.body);
+    }
   }
 
   @override
@@ -141,10 +169,13 @@ class _NameformState extends State<Nameform> {
                     print('TEXT: ${emailController.text}');
                     Map newparams = args.params;
                     newparams['email'] = emailController.text;
+                    newparams['read_type'] = 'Manual';
+                    newparams['birthdate'] = '1990-07-04 00:00:00';
+                    newparams['covid_contact'] = 'TRUE';
+                    newparams['gender'] = 'TRUE';
+                    newparams['is_active'] = 'TRUE';
                     print('ALLPARAMS: $newparams');
-                    Scaffold
-                        .of(context)
-                        .showSnackBar(SnackBar(content: Text('Procesando Información')));
+                    registerVisitor(newparams, context);
                   }
                 },
                 child: Text('Siguiente'),

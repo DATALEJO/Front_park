@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:park_control/src/pages/register/regis_address_page.dart';
 import 'package:park_control/src/pages/register/regis_bday_page.dart';
 import 'package:park_control/src/pages/register/regis_covidconc_page.dart';
+import 'package:park_control/src/pages/register/regis_done_page.dart';
 import 'package:park_control/src/pages/register/regis_email_page.dart';
 import 'package:park_control/src/pages/home_page.dart';
 import 'package:park_control/src/pages/register/regis_gender_page.dart';
@@ -19,6 +20,7 @@ Map<String, WidgetBuilder> getApplicationsRoutes(){
     'register_gender': (BuildContext context) => RegisterGenderPage(),
     'register_address': (BuildContext context) => RegisterAddressPage(),
     'register_email': (BuildContext context) => RegisterEmailPage(),
+    'register_done': (BuildContext context) => RegisterDonePage(),
   };
 }
 

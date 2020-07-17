@@ -141,7 +141,7 @@ class _NameformState extends State<Nameform> {
                     print('PARAMS3: ${args.params}');
                     print('TEXT: ${covContController.text}');
                     Map newparams = args.params;
-                    newparams['covid_contact'] = covContController.text;
+//                    newparams['covid_contact'] = covContController.text;
                     Navigator.pushNamed(context,'register_bday', arguments: covContPagArguments(newparams),);
                     Scaffold
                         .of(context)
