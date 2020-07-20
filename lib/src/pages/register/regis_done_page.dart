@@ -54,7 +54,7 @@ class RegisterDonePage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              margin: EdgeInsets.only(top: 50, bottom: 40),
+                              margin: EdgeInsets.only(top: 70, bottom: 40),
                             ),
                            Card(
                              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 16.0),
