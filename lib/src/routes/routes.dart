@@ -8,11 +8,12 @@ import 'package:park_control/src/pages/home_page.dart';
 import 'package:park_control/src/pages/register/regis_gender_page.dart';
 import 'package:park_control/src/pages/register/regis_id_page.dart';
 import 'package:park_control/src/pages/register/regis_name_page.dart';
+import 'package:park_control/src/screens/bottom_nav_screen.dart';
 
 
 Map<String, WidgetBuilder> getApplicationsRoutes(){
   return <String, WidgetBuilder>{
-    '/': (BuildContext context) => MainPage(),
+    '/': (BuildContext context) => BottomNavScreen(),
     'register_name': (BuildContext context) => RegisNameRPage(),
     'register_cedula': (BuildContext context) => RegisterIdPage(),
     'register_covconct': (BuildContext context) => RegisterCovidConctPage(),
