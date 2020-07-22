@@ -4,9 +4,11 @@
 // the contents, whichever is biggest.
 
 import 'package:flutter/material.dart';
+import 'package:park_control/config/palette.dart';
 import 'package:park_control/src/pages/register/regis_bday_page.dart';
 import 'package:park_control/src/pages/register/regis_covidconc_page.dart';
 import 'package:park_control/src/pages/register/regis_id_page.dart';
+import 'package:park_control/src/widgets/custom_form_appbar.dart..dart';
 
 /// This is the stateless widget that the main application instantiates.
 
@@ -41,6 +43,7 @@ class _RegisterGenderPageState extends State<RegisterGenderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBarForm(context, 'Paso 5/7'),
       body:_body(context),
     );
   }
@@ -62,37 +65,18 @@ class _RegisterGenderPageState extends State<RegisterGenderPage> {
                     gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
-                        colors: [Colors.green[100], Colors.blue[100]])
+                        colors: [Palette.primaryColor, Palette.primaryColor])
                 ),
                 child: Column(
                   children:<Widget>[
                     Container(
-                      child: Stack(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Text('Paso 5/7', style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.grey[700]))
-                            ],
-                          ),
-                          FlatButton(
-                              onPressed: (){
-                                Navigator.pop(context);
-                              },
-                              child: Icon(Icons.keyboard_arrow_left, color: Colors.grey[700],size:30,)
-                          )
-                        ],
-                      ),
-                      margin: EdgeInsets.only(top: 50, bottom: 40),
-                    ),
-                    Container(
                       child: Image(image: AssetImage('assets/regis_gender.png'),width: 220,),
+                      margin: EdgeInsets.only(top: 40.0),
                     ),
-                    Text("Género", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey[700]),),
+                    Text("Género", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Palette.white),),
                     Container(
                         margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 15, bottom: 15),
-                        child: Text("Por favor elige el género del visitante.",style: TextStyle(color: Colors.grey[700]),)
+                        child: Text("Por favor elige el género del visitante.",style: TextStyle(color: Palette.white),)
                     ),
                     Card(
                         margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 16.0),

@@ -4,6 +4,7 @@
 // the contents, whichever is biggest.
 
 import 'dart:io';
+import 'package:park_control/config/palette.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:park_control/src/pages/register/regis_address_page.dart';
@@ -32,30 +33,10 @@ class RegisterDonePage extends StatelessWidget {
                             gradient: LinearGradient(
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,
-                                colors: [Colors.green[100], Colors.blue[100]])
+                                colors: [Palette.primaryColor, Palette.primaryColor])
                         ),
                         child: Column(
                           children:<Widget>[
-                            Container(
-                              child: Stack(
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      Text('Paso 7/7', style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.grey[700]))
-                                    ],
-                                  ),
-                                  FlatButton(
-                                      onPressed: (){
-                                        Navigator.pop(context);
-                                      },
-                                      child: Icon(Icons.keyboard_arrow_left, color: Colors.grey[700],size:30,)
-                                  )
-                                ],
-                              ),
-                              margin: EdgeInsets.only(top: 70, bottom: 40),
-                            ),
                            Card(
                              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 16.0),
                               child: Column(
