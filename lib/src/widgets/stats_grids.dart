@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class StatsGrid extends StatefulWidget {
   @override
@@ -14,11 +17,80 @@ class _StatsGridState extends State<StatsGrid> {
   @override
   void initState() {
     // TODO: implement initState
+    getVisitorsNumber();
+    getVisitorsDeniedNumber();
+    getVisitorsPermitedNumber();
     super.initState();
   }
 
-  getVisitorsNumber(){
-    
+  getVisitorsNumber() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final token = sharedPreferences.getString('token');
+    final APIURLBASE = sharedPreferences.getString('APIURLBASE');
+    var jsonResponse = null;
+    print('Entra a registrar');
+    var response = await http.get(
+        '$APIURLBASE/api/v1.0/visitor/total/', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'JWT $token'
+    });
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      Map<String, dynamic> data_api = jsonDecode(response.body);
+      setState(() {
+        visitorsNumber = data_api['response'];
+      });
+    }
+    else {
+      print("Error");
+      print(response.body);
+    }
+  }
+
+  getVisitorsDeniedNumber() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final token = sharedPreferences.getString('token');
+    final APIURLBASE = sharedPreferences.getString('APIURLBASE');
+    var jsonResponse = null;
+    print('Entra a registrar');
+    var response = await http.get('$APIURLBASE/api/v1.0/visitor/denied/', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'JWT $token'
+    });
+    if(response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      Map<String, dynamic> data_api = jsonDecode(response.body);
+      setState((){
+        deniedNumber = data_api['response'];
+      });
+    }
+    else {
+      print("Error");
+      print(response.body);
+    }
+  }
+
+  getVisitorsPermitedNumber() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final token = sharedPreferences.getString('token');
+    final APIURLBASE = sharedPreferences.getString('APIURLBASE');
+    var jsonResponse = null;
+    print('Entra a registrar');
+    var response = await http.get('$APIURLBASE/api/v1.0/visitor/permited/', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'JWT $token'
+    });
+    if(response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      Map<String, dynamic> data_api = jsonDecode(response.body);
+      setState((){
+        aceptedNumber = data_api['response'];
+      });
+    }
+    else {
+      print("Error");
+      print(response.body);
+    }
   }
 
   @override
@@ -30,15 +102,15 @@ class _StatsGridState extends State<StatsGrid> {
           Flexible(
             child: Row(
               children: <Widget>[
-                _buildStatCard('Visitantes', '${visitorsNumber} v', Colors.orange),
+                _buildStatCard('Visitantes', '${visitorsNumber != 0 ? visitorsNumber : 'loading..'} v', Colors.orange),
               ],
             ),
           ),
           Flexible(
             child: Row(
               children: <Widget>[
-                _buildStatCard('Aceptados', '${aceptedNumber} v', Colors.green),
-                _buildStatCard('Denegados', '${deniedNumber} v', Colors.red),
+                _buildStatCard('Aceptados', '${aceptedNumber != 0 ? aceptedNumber : '..'} v', Colors.green),
+                _buildStatCard('Denegados', '${deniedNumber != 0 ? deniedNumber : '..'} v', Colors.red),
                 _buildStatCard('Edad Prom', '${promAge}', Colors.lightBlue),
               ],
             ),

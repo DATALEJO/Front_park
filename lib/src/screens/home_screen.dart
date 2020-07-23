@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:park_control/config/palette.dart';
 import 'package:park_control/config/styles.dart';
 import 'package:park_control/data/data.dart';
+import 'package:park_control/login_page.dart';
 import 'package:park_control/src/widgets/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +14,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _country = 'USA';
+  SharedPreferences sharedPreferences;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+              (Route<dynamic> route) => false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
