@@ -12,7 +12,7 @@ class _StatsGridState extends State<StatsGrid> {
   int visitorsNumber = 0;
   int aceptedNumber = 0;
   int deniedNumber = 0;
-  double promAge = 0.0;
+  double avgAge = 0.0;
 
   @override
   void initState() {
@@ -20,6 +20,7 @@ class _StatsGridState extends State<StatsGrid> {
     getVisitorsNumber();
     getVisitorsDeniedNumber();
     getVisitorsPermitedNumber();
+    getVisitorsAvgAge();
     super.initState();
   }
 
@@ -53,7 +54,7 @@ class _StatsGridState extends State<StatsGrid> {
     final APIURLBASE = sharedPreferences.getString('APIURLBASE');
     var jsonResponse = null;
     print('Entra a registrar');
-    var response = await http.get('$APIURLBASE/api/v1.0/visitor/denied/', headers: {
+    var response = await http.get('$APIURLBASE/api/v1.0/visitor/permited/', headers: {
       'Accept': 'application/json',
       'Authorization': 'JWT $token'
     });
@@ -62,6 +63,29 @@ class _StatsGridState extends State<StatsGrid> {
       Map<String, dynamic> data_api = jsonDecode(response.body);
       setState((){
         deniedNumber = data_api['response'];
+      });
+    }
+    else {
+      print("Error");
+      print(response.body);
+    }
+  }
+
+  getVisitorsAvgAge() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final token = sharedPreferences.getString('token');
+    final APIURLBASE = sharedPreferences.getString('APIURLBASE');
+    var jsonResponse = null;
+    print('Entra a registrar');
+    var response = await http.get('$APIURLBASE/api/v1.0/visitor/avg_age/', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'JWT $token'
+    });
+    if(response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      Map<String, dynamic> data_api = jsonDecode(response.body);
+      setState((){
+        avgAge = double.parse(data_api['response']);
       });
     }
     else {
@@ -111,7 +135,7 @@ class _StatsGridState extends State<StatsGrid> {
               children: <Widget>[
                 _buildStatCard('Aceptados', '${aceptedNumber != 0 ? aceptedNumber : '..'} v', Colors.green),
                 _buildStatCard('Denegados', '${deniedNumber != 0 ? deniedNumber : '..'} v', Colors.red),
-                _buildStatCard('Edad Prom', '${promAge}', Colors.lightBlue),
+                _buildStatCard('Edad Prom', '${avgAge}', Colors.lightBlue),
               ],
             ),
           ),

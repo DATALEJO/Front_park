@@ -31,7 +31,7 @@ class _NameformState extends State<RegisNameRPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarForm(context, 'Paso 1/7'),
+      appBar: CustomAppBarForm(context, ''),
       body:_body(),
     );
   }
@@ -55,7 +55,11 @@ class _NameformState extends State<RegisNameRPage> {
                         child: Image(image: AssetImage('assets/profile_guess.png'),width: 220,),
                         margin: EdgeInsets.only(top: 40.0),
                       ),
-                      Text("Nombre", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Palette.white),),
+                      Container(
+                         margin:EdgeInsets.only(top: 40.0),
+                          child: Text("Nombre", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Palette.white),
+                          )
+                      ),
                       Container(
                           margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 15, bottom: 15),
                           child: Text("Digita el nombre y apellido del visitante.",style: TextStyle(color: Palette.white),)

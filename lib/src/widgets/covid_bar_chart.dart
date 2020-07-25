@@ -4,6 +4,7 @@ import 'package:park_control/config/styles.dart';
 
 class CovidBarChart extends StatelessWidget {
   final List<double> covidCases;
+  final cont=0;
   const CovidBarChart({
     @required this.covidCases
    });
@@ -33,7 +34,7 @@ class CovidBarChart extends StatelessWidget {
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
-                maxY: 16.0,
+                maxY: 50.0,
                 barTouchData: BarTouchData(
                   enabled: false
                 ),
@@ -47,19 +48,15 @@ class CovidBarChart extends StatelessWidget {
                     getTitles: (double value){
                       switch(value.toInt()){
                         case 0:
-                          return 'May 24';
+                          return 'última';
                         case 1:
-                          return 'May 25';
+                          return 'penul..';
                         case 2:
-                          return 'May 26';
+                          return 'antepenu..';
                         case 3:
-                          return 'May 27';
+                          return 'siguiente';
                         case 4:
-                          return 'May 28';
-                        case 5:
-                          return 'May 29';
-                        case 6:
-                          return 'May 30';
+                          return 'siguiente';
                         default:
                           return '';
                       }
@@ -71,9 +68,11 @@ class CovidBarChart extends StatelessWidget {
                     textStyle: Styles.chartLabelsTextStyle,
                     getTitles: (value){
                       if(value == 0){
-                        return '0';
-                      }else if(value % 3 == 0){
-                        return '${value ~/ 3 *5}°';
+                        return '0°';
+                      }else if(value % 5 == 0){
+                        return '${value.toInt()}°';
+                      }else if(value == 10){
+                        return '$value';
                       }
                       return '';
                     }

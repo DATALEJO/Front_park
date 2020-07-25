@@ -6,6 +6,9 @@ import 'package:park_control/config/styles.dart';
 import 'package:park_control/data/data.dart';
 import 'package:park_control/src/widgets/custom_app_bar.dart';
 import 'package:park_control/src/widgets/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class StatsScreen extends StatefulWidget {
   @override
@@ -13,6 +16,49 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
+  List<double> covidCases;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTempMeasures();
+    covidCases = [0.0,0.0,0.0,0.0,0.0];
+  }
+
+  getTempMeasures() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final token = sharedPreferences.getString('token');
+    final APIURLBASE = sharedPreferences.getString('APIURLBASE');
+    var jsonResponse = null;
+    print('Entra a registrar');
+    var response = await http.get(
+        '$APIURLBASE/api/v1.0/temperature-measure/last_five/', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'JWT $token'
+    });
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      List<dynamic> dataP = jsonResponse['response'];
+      List<double> cleanList = [];
+      dataP.forEach((element) {
+        if(element.runtimeType != double){
+          cleanList.add(element.toDouble());
+        }else{
+          cleanList.add(element);
+        }
+      });
+      setState(() {
+        print(cleanList);
+        covidCases = cleanList;
+      });
+    }
+    else {
+      print("Error");
+      print(response.body);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +79,7 @@ class _StatsScreenState extends State<StatsScreen> {
             padding: const EdgeInsets.only(top:20.0, left: 20.0, right: 20.0),
             sliver: SliverToBoxAdapter(
               child: CovidBarChart(
-                covidCases: covidUSADailyNewCases
+                covidCases: covidCases
               ),
             ),
           )
@@ -104,8 +150,8 @@ class _StatsScreenState extends State<StatsScreen> {
             unselectedLabelColor: Colors.white60,
             tabs: <Widget>[
               Text('Total'),
-              Text('Today'),
-              Text('Yesterday'),
+              Text('Hoy'),
+              Text('Ayer'),
             ],
             onTap: (index) {},
           ),

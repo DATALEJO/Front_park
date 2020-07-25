@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           horizontal: 20.0,
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed('register_name');
+                          Navigator.of(context).pushNamed('temp');
                         },
                         color: Colors.red,
                         shape: RoundedRectangleBorder(
