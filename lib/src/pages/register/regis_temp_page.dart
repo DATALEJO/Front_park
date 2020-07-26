@@ -102,21 +102,6 @@ class _NameformState extends State<RegisTempPage> {
      return '$mayor';
   }
 
-  createExternalFolder() async {
-    var dir = await getExternalStorageDirectory();
-    print(dir);
-    new Directory(dir.path+'/'+'temperatures').create(recursive: true).then((Directory directory) {
-      print('Path of New Dir: '+directory.path);
-    });
-  }
-
-  askforPermission() async{
-    if (await Permission.storage.request().isGranted) {
-      print('Granted my so');
-      // Either the permission was already granted before or the user just granted it.
-    }
-  }
-
 //  Future<File> writeData() async{
 //    setState(() {
 //      state = contoller.text;

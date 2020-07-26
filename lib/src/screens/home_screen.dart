@@ -6,6 +6,12 @@ import 'package:park_control/data/data.dart';
 import 'package:park_control/login_page.dart';
 import 'package:park_control/src/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
+import "package:path_provider/path_provider.dart";
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,6 +27,25 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     checkLoginStatus();
+    checkPermission();
+  }
+
+  Future<void> checkPermission() async {
+    var status = await Permission.storage.status;
+    if (status.isUndetermined) {
+      if (await Permission.storage.request().isGranted) {
+        print('Permiso Garantizado');
+        createExternalFolder();
+      }
+    }
+  }
+
+  createExternalFolder() async {
+    var dir = await getExternalStorageDirectory();
+    print(dir);
+    new Directory(dir.path+'/'+'temperatures').create(recursive: true).then((Directory directory) {
+      print('Path of New Dir: '+directory.path);
+    });
   }
 
   checkLoginStatus() async {

@@ -77,7 +77,6 @@ class _NameformState extends State<RegisNameRPage> {
         ),
       );
   }
-
   _bodyForm(){
     return Column(
       children: <Widget>[
