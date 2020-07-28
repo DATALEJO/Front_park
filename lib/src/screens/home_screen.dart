@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           Navigator.of(context).pushNamed('temp');
                         },
-                        color: Colors.red,
+                        color: Color.fromRGBO(10, 131, 194, 30),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),

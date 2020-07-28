@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [Colors.blue, Colors.teal],
+              colors: [Color.fromRGBO(20,40,80,1), Color.fromRGBO(17, 168, 171, 1)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter),
         ),
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   signIn(String email, pass) async {
-    final APIURLBASE = 'http://datalejo.com:8005/';
+    final APIURLBASE = 'http://3.91.89.247:8005/';
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {
       'username': email,
@@ -79,8 +79,8 @@ class _LoginPageState extends State<LoginPage> {
           signIn(emailController.text, passwordController.text);
         },
         elevation: 0.0,
-        color: Colors.purple,
-        child: Text("Ingresar", style: TextStyle(color: Colors.white70)),
+        color: Color.fromRGBO(10, 194, 133, 76),
+        child: Text("Ingresar", style: TextStyle(color: Color.fromRGBO(245, 245, 245, 1),)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
       ),
     );
@@ -97,25 +97,31 @@ class _LoginPageState extends State<LoginPage> {
           TextFormField(
             controller: emailController,
             cursorColor: Colors.white,
-            style: TextStyle(color: Colors.white70),
+            style: TextStyle(color: Color.fromRGBO(245, 245, 245, 1),),
             decoration: InputDecoration(
-              icon: Icon(Icons.account_circle, color: Colors.white70),
+              icon: Icon(Icons.account_circle, color: Color.fromRGBO(245, 245, 245, 1),),
               hintText: "Usuario",
-              border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
-              hintStyle: TextStyle(color: Colors.white70),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(245, 245, 245, 1),)),
+              hintStyle: TextStyle(color: Color.fromRGBO(180, 180, 180, 1),),
             ),
           ),
           SizedBox(height: 30.0),
           TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Por favor digite el usuario';
+              }
+              return null;
+            },
             controller: passwordController,
             cursorColor: Colors.white,
             obscureText: true,
-            style: TextStyle(color: Colors.white70),
+            style: TextStyle(color: Color.fromRGBO(245, 245, 245, 1),),
             decoration: InputDecoration(
-              icon: Icon(Icons.lock, color: Colors.white70),
+              icon: Icon(Icons.lock, color: Color.fromRGBO(245, 245, 245, 1),),
               hintText: "Contraseña",
-              border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
-              hintStyle: TextStyle(color: Colors.white70),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(245, 245, 245, 1),)),
+              hintStyle: TextStyle(color: Color.fromRGBO(180, 180, 180, 1),),
             ),
           ),
         ],
@@ -127,9 +133,9 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.only(top: 50.0),
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-      child: Text("Park Control",
+      child: Text("Covid Control",
           style: TextStyle(
-              color: Colors.white70,
+              color: Color.fromRGBO(245, 245, 245, 1),
               fontSize: 40.0,
               fontWeight: FontWeight.bold)),
     );

@@ -12,19 +12,19 @@ import 'dart:io';
 import "package:path_provider/path_provider.dart";
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class RegisTempPage extends StatefulWidget {
   final Storage storage;
-  const RegisTempPage({Key key,@required this.storage}) : super(key: key);
+
+  const RegisTempPage({Key key, @required this.storage}) : super(key: key);
+
   @override
   _NameformState createState() => _NameformState();
 }
-
-
-
 
 class _NameformState extends State<RegisTempPage> {
   String state;
@@ -34,8 +34,8 @@ class _NameformState extends State<RegisTempPage> {
   String stateVisitor;
   String imgToshow;
   Container contButtons;
-
-
+  double marginVisitor;
+  Color colorTemp;
 
   @override
   void initState() {
@@ -49,57 +49,77 @@ class _NameformState extends State<RegisTempPage> {
     var dir = await getExternalStorageDirectory();
     var dirStr = dir.path;
     Directory dirTemps;
-    dir.list(recursive: false, followLinks: false)
+    dir
+        .list(recursive: false, followLinks: false)
         .listen((FileSystemEntity entity) {
-      if(entity.path.indexOf('temperatures')>0){
+      if (entity.path.indexOf('temperatures') > 0) {
         dirTemps = entity;
       }
     }).onDone(() {
-      dirTemps.list(recursive: false, followLinks: false)
+      dirTemps
+          .list(recursive: false, followLinks: false)
           .listen((FileSystemEntity entity) {
-        var pathToAdd =  entity.path.replaceAll(dirStr+'/temperatures/', '');
-        pathToAdd =  pathToAdd.replaceAll('.txt', '');
+        var pathToAdd = entity.path.replaceAll(dirStr + '/temperatures/', '');
+        pathToAdd = pathToAdd.replaceAll('.txt', '');
         pathList.add(pathToAdd);
-      })
-      .onDone(() {
-          print('DOne');
-          String fileStr = getLastFile();
-          widget.storage.readData(fileStr).then((str){
-            setState(() {
-              state = '${str}';
-              stateVisitor = double.parse(str) >= 38.0 ? 'NO ADMITIDO' : 'ACEPTADO';
-              imgToshow = double.parse(str) >= 38.0 ? "assets/denied_visitor.png":"assets/accepted.png";
-              contButtons = double.parse(str) >= 38.0 ? Container(): Container(
-                child: Column(
-                  children: <Widget>[
-                    RaisedButton(
-                      onPressed: (){
-                        Navigator.pushNamed(context,'register_name');
-                      },
-                      child: Text('Registrar Visitante'),
-                    )
-                  ],
-                ),
-              ) ;
-            });
+      }).onDone(() {
+        print(pathList);
+        print('DOne');
+        String fileStr = getLastFile();
+        widget.storage.readData(fileStr).then((str) {
+          setState(() {
+            print(str.runtimeType);
+            state = '${str.trim()}°';
+            stateVisitor =
+                double.parse(str) >= 38.0 ? 'NO ADMITIDO' : 'ADMITIDO';
+            marginVisitor = double.parse(str) >= 38.0 ? 330.0 : 0.0;
+            colorTemp = double.parse(str) >= 38.0 ? Colors.red : Colors.green;
+            imgToshow = double.parse(str) >= 38.0
+                ? "assets/denied_visitor.png"
+                : "assets/regis_done.png";
+            contButtons = double.parse(str) >= 38.0
+                ? Container()
+                : Container(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          margin: EdgeInsets.only(bottom: 300.0),
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, 'register_name');
+                            },
+                            padding: EdgeInsets.all(15.0),
+                            color: Color.fromRGBO(10, 131, 194, 0.7),
+                            child: Text(
+                              'Registrar Visitante',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
           });
-
+        });
       });
     });
     return dataToSend;
   }
 
-  String getLastFile(){
+  String getLastFile() {
     print("GETLASTFILE");
-    int mayor;
-     pathList.forEach((element) {
-       mayor = int.parse(element);
-       int currentElement = int.parse(element);
-       if(currentElement>mayor){
-         mayor = currentElement;
-       }
-     });
-     return '$mayor';
+    int mayor = int.parse(pathList[0]);
+    pathList.forEach((element) {
+      int currentElement = int.parse(element);
+      print(currentElement > mayor);
+      if (currentElement > mayor) {
+        mayor = currentElement;
+      }
+    });
+    return '$mayor';
   }
 
 //  Future<File> writeData() async{
@@ -121,87 +141,106 @@ class _NameformState extends State<RegisTempPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarForm(context, ''),
-      body:_body(),
+      body: _body(),
     );
   }
 
-  _body(){
+  _body() {
     return SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 1,
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [Palette.primaryColor, Palette.primaryColor])
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [Palette.primaryColor, Palette.primaryColor])),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+//                Container(
+//                  child: Image(
+//                    image: AssetImage('${imgToshow ?? "assets/loading.gif"}'),
+//                    width: 220,
+//                  ),
+//                  margin: EdgeInsets.only(top: 40.0),
+//                ),
+                Container(
+                    margin: EdgeInsets.only(bottom: 25.0, top: 60.0),
+                    child: Text('Temperatura',
+                        style: TextStyle(
+                            fontSize: 35.0,
+                            color: Color.fromRGBO(240, 240, 240, 1),
+                            fontWeight: FontWeight.bold))),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.51,
+                  padding: EdgeInsets.only(top: 10.00, bottom: 10.00),
+                  decoration: BoxDecoration(
+                      color: colorTemp == null ? Colors.green : colorTemp,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.black, width: 6)),
+                  child: Column(
+                    children: <Widget>[
+                      Center(
+                          child: Text('${state ?? "..."}',
+                              style: TextStyle(
+                                  fontSize: 50.0,
+                                  color: Colors.black,
+                                  fontFamily: 'DisplayR'),
+                              textAlign: TextAlign.center)),
+                    ],
+                  ),
                 ),
-                child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children:<Widget>[
-                  Container(
-                    child: Image(
-                      image: AssetImage('${imgToshow ?? "assets/loading.gif"}'),
-                      width: 220,
-                    ),
-                    margin: EdgeInsets.only(top: 40.0),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 30.0,bottom: 20.0),
-                    child: Text('${stateVisitor ?? "..."}', style:TextStyle(fontSize: 35.0, color: Colors.white),),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(bottom: 10.0),
-                      child: Text('Temperatura',style: TextStyle(fontSize: 24.0, color: Colors.white)
-                      )
-                  ),
-                  Center(
-                      child: Text('${state??"..."}', style: TextStyle(fontSize: 24.0, color: Colors.white), textAlign: TextAlign.center)
-                  ),
-                  Center(
-                    child:contButtons??Container(),
-                  )
-                ],
-              ),
-              ),
+                Container(
+                  margin: EdgeInsets.only(top: 30.0, bottom: 20.0),
+                  child: Container(
+                      margin: EdgeInsets.only(
+                          bottom: marginVisitor == null ? 0 : marginVisitor),
+                      child: Text(
+                        '${stateVisitor ?? "..."}',
+                        style: TextStyle(fontSize: 25.0, color: Colors.white),
+                      )),
+                ),
+                Center(
+                  child: contButtons ?? Container(),
+                )
+              ],
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }
 
-class Storage{
+class Storage {
   String strFile;
-  Future<String> get localPath async{
+
+  Future<String> get localPath async {
     final dir = await getExternalStorageDirectory();
     return dir.path;
   }
 
-  Future<File> getlocalFile(sFile) async{
+  Future<File> getlocalFile(sFile) async {
     final path = await localPath;
     return File('$path/temperatures/${sFile}.txt');
   }
 
-  Future<String> readData(String sFile) async{
-    try{
+  Future<String> readData(String sFile) async {
+    try {
       final file = await getlocalFile(sFile);
       String body = await file.readAsStringSync();
       return body;
-    }catch(e){
+    } catch (e) {
       return e.toString();
     }
   }
 
-  Future<File> writeData(String data, String sFile) async{
+  Future<File> writeData(String data, String sFile) async {
     strFile = sFile;
     final file = await getlocalFile(sFile);
     return file.writeAsString("$data");
   }
-
-
 }
