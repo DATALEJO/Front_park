@@ -5,6 +5,7 @@
 
 import 'dart:io';
 import 'package:park_control/config/palette.dart';
+import 'package:park_control/src/widgets/custom_form_appbar.dart..dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:park_control/src/pages/register/regis_address_page.dart';
@@ -15,9 +16,9 @@ import 'dart:convert';
 class RegisterDonePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DefaultTextStyle(
-      style: Theme.of(context).textTheme.bodyText2,
-      child: LayoutBuilder(
+    return Scaffold(
+      appBar: DoneAppBarForm(context, 'Completado'),
+      body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
@@ -29,6 +30,7 @@ class RegisterDonePage extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: Container(
+                        padding: EdgeInsets.only(top: 40.0),
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
                                 begin: Alignment.topRight,
@@ -72,6 +74,17 @@ class RegisterDonePage extends StatelessWidget {
   }
 }
 
+Widget DoneAppBarForm(context, String title){
+  return AppBar(
+    leading: IconButton(
+      icon: const Icon(Icons.done_all, color: Colors.white,),
+      iconSize: 28.0,
+    ),
+    backgroundColor: Palette.primaryColor,
+    title: Text(title),
+  );
+}
+
 class form extends StatefulWidget {
   @override
   _formState createState() => _formState();
@@ -85,7 +98,6 @@ class EmailPagArguments {
 
 
 class _formState extends State<form> {
-
   @override
   Widget build(BuildContext context) {
     final AddressPagArguments args = ModalRoute.of(context).settings.arguments;

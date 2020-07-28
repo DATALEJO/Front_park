@@ -112,7 +112,7 @@ class _RegisterAddressPageState extends State<RegisterAddressPage> {
                         // you'd often call a server or save the information in a database.
                         print('TEXTADDRESS: ${addressController.text}');
                         Map newparams = args.params;
-                        newparams['address'] = addressController.text;
+                        newparams['visitor']['address'] = addressController.text;
                         print('PARAMSADDRESS: ${newparams}');
                         Navigator.pushNamed(context,'register_email', arguments: AddressPagArguments(newparams),);
                       }

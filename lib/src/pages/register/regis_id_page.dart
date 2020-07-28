@@ -113,7 +113,9 @@ class _RegisterIdPageState extends State<RegisterIdPage> {
                         // If the form is valid, display a snackbar. In the real world,
                         // you'd often call a server or save the information in a database.
                         print('PARAMS1: ${idController.text}');
-                        Navigator.pushNamed(context,'register_covconct', arguments: IdPagArguments({'name':args.name,'cedula':idController.text}),);
+                        var newParams = args.params;
+                        newParams['visitor']['cedula'] = idController.text;
+                        Navigator.pushNamed(context,'register_covconct', arguments: IdPagArguments(newParams),);
                         Scaffold
                             .of(context)
                             .showSnackBar(SnackBar(content: Text('Procesando Información')));
@@ -128,6 +130,8 @@ class _RegisterIdPageState extends State<RegisterIdPage> {
         ),
       ],
     );
+
+
   }
 }
 

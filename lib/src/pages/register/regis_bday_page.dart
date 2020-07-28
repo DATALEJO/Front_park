@@ -146,7 +146,7 @@ class _NameformState extends State<RegisterBdayPage> {
                       // If the form is valid, display a snackbar. In the real world
                       // you'd often call a server or save the information in a database.
                       Map newparams = args.params;
-                      newparams['birthdate'] = selectedDate.toString().substring(0,19);
+                      newparams['visitor']['birthdate'] = selectedDate.toString().substring(0,19);
                       print('PARAMSBDAY: $newparams');
                       Navigator.pushNamed(context, 'register_gender', arguments: BDayPagArguments(newparams));
 //                        Scaffold

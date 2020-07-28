@@ -158,8 +158,8 @@ class _RegisterCovidConctPageState extends State<RegisterCovidConctPage> {
                         // If the form is valid, display a snackbar. In the real world,
                         // you'd often call a server or save the information in a database.
                         Map newparams = args.params;
-                        var valCovidConct = selectedRadio == 0 ? 'false' : 'true';
-                        newparams['covid_contact'] = valCovidConct;
+                        var valCovidConct = selectedRadio == 0 ? 'False' : 'True';
+                        newparams['visitor']['covid_contact'] = valCovidConct;
                         print('PARAMSCOVC: ${newparams}');
                         Navigator.pushNamed(context,'register_bday', arguments: covContPagArguments(newparams),);
                       }

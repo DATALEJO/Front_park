@@ -37,12 +37,16 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
   }
 
   registerVisitor(Map dataVisitor, BuildContext context) async {
+    print('MAP $dataVisitor');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('token');
     final APIURLBASE = sharedPreferences.getString('APIURLBASE');
     var jsonResponse = null;
     print('Entra a registrar');
-    var response = await http.post('$APIURLBASE/api/v1.0/visitors/', body: dataVisitor, headers: {
+    var dataSend = Map<String, dynamic>.from(dataVisitor);
+    print('TYPE: ${dataSend.runtimeType}');
+    var response = await http.post('$APIURLBASE/api/v1.0/visitor/create/', body: jsonEncode(dataVisitor), headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
       'Authorization': 'JWT $token'
     });
@@ -131,13 +135,10 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
                         print('PARAMS7: ${args.params}');
                         print('TEXT: ${emailController.text}');
                         Map newparams = args.params;
-                        newparams['email'] = emailController.text;
-                        newparams['read_type'] = 'Manual';
-                        //newparams['birthdate'] = '1990-07-04 00:00:00';
-                        //newparams['covid_contact'] = 'TRUE';
-                        //newparams['gender'] = 'TRUE';
-                        newparams['is_active'] = 'TRUE';
-                        print('ALLPARAMS: $newparams');
+                        newparams['visitor']['email'] = emailController.text;
+                        newparams['visitor']['read_type'] = 'Manual';
+                        newparams['visitor']['is_active'] = 'True';
+                        //print('ALLPARAMS: $newparams');
                         registerVisitor(newparams, context);
                     },
                     child: Text('Registrar Información'),

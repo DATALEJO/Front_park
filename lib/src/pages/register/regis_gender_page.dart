@@ -160,8 +160,8 @@ class _RegisterGenderPageState extends State<RegisterGenderPage> {
                         // If the form is valid, display a snackbar. In the real world,
                         // you'd often call a server or save the information in a database.
                         Map newparams = args.params;
-                        var valGender = selectedRadio == 0 ? 'false' : 'true';
-                        newparams['gender'] = valGender;
+                        var valGender = selectedRadio == 0 ? 'False' : 'True';
+                        newparams['visitor']['gender'] = valGender;
                         print('PARAMSGENDER: ${newparams}');
                         Navigator.pushNamed(context,'register_address', arguments: GenderPagArguments(newparams),);
                         Scaffold

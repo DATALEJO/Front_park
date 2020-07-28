@@ -12,6 +12,7 @@ import 'dart:io';
 import "package:path_provider/path_provider.dart";
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:convert';
@@ -26,6 +27,11 @@ class RegisTempPage extends StatefulWidget {
   _NameformState createState() => _NameformState();
 }
 
+class TempPagArguments {
+  final Map params;
+  TempPagArguments(this.params);
+}
+
 class _NameformState extends State<RegisTempPage> {
   String state;
   List pathList = [];
@@ -36,6 +42,7 @@ class _NameformState extends State<RegisTempPage> {
   Container contButtons;
   double marginVisitor;
   Color colorTemp;
+  String visitorAllowed;
 
   @override
   void initState() {
@@ -62,16 +69,22 @@ class _NameformState extends State<RegisTempPage> {
         var pathToAdd = entity.path.replaceAll(dirStr + '/temperatures/', '');
         pathToAdd = pathToAdd.replaceAll('.txt', '');
         pathList.add(pathToAdd);
-      }).onDone(() {
+      }).onDone(() async {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
         print(pathList);
         print('DOne');
+        //Modifica la vista para mostrar los datos de temperatura
         String fileStr = getLastFile();
+        print('ARCHIVO: $fileStr');
+        sharedPreferences.setString("idtemp", fileStr);
         widget.storage.readData(fileStr).then((str) {
+          sharedPreferences.setString("vtemp", str);
           setState(() {
             print(str.runtimeType);
             state = '${str.trim()}°';
             stateVisitor =
                 double.parse(str) >= 38.0 ? 'NO ADMITIDO' : 'ADMITIDO';
+            visitorAllowed = double.parse(str) >= 38.0 ? 'False' : 'True';
             marginVisitor = double.parse(str) >= 38.0 ? 330.0 : 0.0;
             colorTemp = double.parse(str) >= 38.0 ? Colors.red : Colors.green;
             imgToshow = double.parse(str) >= 38.0
@@ -89,7 +102,7 @@ class _NameformState extends State<RegisTempPage> {
                           margin: EdgeInsets.only(bottom: 300.0),
                           child: RaisedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, 'register_name');
+                              Navigator.pushNamed(context, 'register_name', arguments: TempPagArguments(createInitialParams({'allowed':visitorAllowed, 'value':double.parse(str.trim())})));
                             },
                             padding: EdgeInsets.all(15.0),
                             color: Color.fromRGBO(10, 131, 194, 0.7),
@@ -213,6 +226,16 @@ class _NameformState extends State<RegisTempPage> {
       ),
     );
   }
+
+
+  Map createInitialParams(Map data) {
+    var newParams = {};
+    newParams['visit'] = {'allowed':data['allowed']};
+    newParams['visitor'] = {};
+    newParams['temperature_measure'] = {'value':data['value']};
+    return newParams;
+  }
+
 }
 
 class Storage {

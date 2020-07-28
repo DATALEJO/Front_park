@@ -5,7 +5,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:park_control/config/palette.dart';
+import 'package:park_control/src/pages/register/regis_temp_page.dart';
 import 'package:park_control/src/widgets/custom_form_appbar.dart..dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisNameRPage extends StatefulWidget {
   @override
@@ -13,13 +15,20 @@ class RegisNameRPage extends StatefulWidget {
 }
 
 class NamePagArguments {
-  final String name;
-  NamePagArguments(this.name);
+  final Map params;
+  NamePagArguments(this.params);
 }
 
 class _NameformState extends State<RegisNameRPage> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  String idFile;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -32,11 +41,11 @@ class _NameformState extends State<RegisNameRPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarForm(context, ''),
-      body:_body(),
+      body:_body(context),
     );
   }
 
-  _body(){
+  _body(context){
     return SingleChildScrollView(
         child: IntrinsicHeight(
           child: Column(
@@ -66,7 +75,7 @@ class _NameformState extends State<RegisNameRPage> {
                       ),
                       Card(
                           margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 16.0),
-                          child: _bodyForm(),
+                          child: _bodyForm(context),
                       )
                     ],
                   ),
@@ -77,7 +86,8 @@ class _NameformState extends State<RegisNameRPage> {
         ),
       );
   }
-  _bodyForm(){
+  _bodyForm(context) {
+    final TempPagArguments args = ModalRoute.of(context).settings.arguments;
     return Column(
       children: <Widget>[
         Form(
@@ -112,10 +122,13 @@ class _NameformState extends State<RegisNameRPage> {
                       if (_formKey.currentState.validate()) {
                         // If the form is valid, display a snackbar. In the real world,
                         // you'd often call a server or save the information in a database.
-                        Navigator.pushNamed(context,'register_cedula', arguments: NamePagArguments(nameController.text),);
-                        Scaffold
-                            .of(context)
-                            .showSnackBar(SnackBar(content: Text('Procesando Información')));
+                        print('Allowed: ${args.params['allowed']}');
+                        var newParams = args.params;
+                        newParams['visitor']['name'] = nameController.text;
+                        getTempData(newParams).then((vParams){
+                          print('NEPARAMS: $vParams');
+                            Navigator.pushNamed(context,'register_cedula', arguments: NamePagArguments(vParams),);
+                        });
                       }
                     },
                     child: Text('Siguiente'),
@@ -128,4 +141,12 @@ class _NameformState extends State<RegisNameRPage> {
       ],
     );
   }
+
+  Future<Map> getTempData(Map params) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Map newParams = params;
+    newParams['temperature_measure']['id_file'] = sharedPreferences.getString('idtemp');
+    return newParams;
+  }
+
 }

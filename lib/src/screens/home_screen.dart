@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   checkLoginStatus() async {
+
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString("token") == null) {
       Navigator.of(context).pushAndRemoveUntil(
