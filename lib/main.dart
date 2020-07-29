@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:park_control/config/palette.dart';
 import 'package:park_control/src/routes/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:park_control/src/screens/bottom_nav_screen.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+          errorColor: Colors.redAccent
       ),
       routes: getApplicationsRoutes(),
       initialRoute: '/',

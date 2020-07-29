@@ -33,7 +33,7 @@ class _InfoScreenState extends State<InfoScreen> {
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        color: Colors.indigo[900],
+        color: Palette.primaryColor,
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(0),
           bottomLeft: Radius.circular(0),
@@ -65,7 +65,7 @@ class _InfoScreenState extends State<InfoScreen> {
               Text(
                 'Esta aplicación fue diseña por Datalejo. 2020 ©',
                 style: const TextStyle(
-                  color: Colors.white70,
+                  color: Palette.white,
                   fontSize: 15.0,
                 ),
               ),
