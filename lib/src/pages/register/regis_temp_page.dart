@@ -124,6 +124,7 @@ class _NameformState extends State<RegisTempPage> {
                 margin: EdgeInsets.only(bottom: 300.0),
                 child: RaisedButton(
                   onPressed: () {
+                    setFileProccesed();
                     Navigator.pushNamed(context, 'register_name',
                         arguments: TempPagArguments(
                             createInitialParams({
@@ -147,6 +148,7 @@ class _NameformState extends State<RegisTempPage> {
     print('ARCHIVO: $fileStr');
     sharedPreferences.setString("idtemp", fileStr);
     sharedPreferences.setString("accomplished", 'False');
+    sharedPreferences.setString('accomplished', 'True');
   }
 
   String getLastFile() {
@@ -169,6 +171,125 @@ class _NameformState extends State<RegisTempPage> {
 //    });
 //    return widget.storage.writeData(state);
 //  }
+
+  Container TempBad(){
+    return Container(
+      margin: EdgeInsets.only(bottom: 280.0),
+      width: MediaQuery.of(context).size.width * 1,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+              margin: EdgeInsets.only(bottom: 25.0, top: 60.0),
+              child: Text('Sin Temperatura',
+                  style: TextStyle(
+                      fontSize: 35.0,
+                      color: Color.fromRGBO(240, 240, 240, 1),
+                      fontWeight: FontWeight.bold))
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.51,
+            margin: EdgeInsets.only(top: 50.0),
+            padding: EdgeInsets.only(top: 10.00, bottom: 10.00),
+            decoration: BoxDecoration(
+                color: colorTemp == null ? Colors.green : colorTemp,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.black, width: 6)),
+            child: Column(
+              children: <Widget>[
+                Center(
+                    child: Text('${state ?? "--:--"}',
+                        style: TextStyle(
+                            fontSize: 50.0,
+                            color: Colors.black,
+                            fontFamily: 'DisplayR'),
+                        textAlign: TextAlign.center)),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top:50.0, left: 20.0, right: 20.0),
+              child: Text('Por favor acerquese al sensor para registrar su temperatura. Luego oprima el botón de actualizar.', style: TextStyle(color: Palette.white, fontSize: 18.0),textAlign: TextAlign.center,)
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: Container(
+                child: RaisedButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, 'temp');
+                  },
+                    child: Image(image: AssetImage('assets/refresh_temp.png'),width: 200,color: Palette.primaryColor,)
+                )
+            ),
+            margin: EdgeInsets.only(top: 40.0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Column tempoOk(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+//                Container(
+//                  child: Image(
+//                    image: AssetImage('${imgToshow ?? "assets/loading.gif"}'),
+//                    width: 220,
+//                  ),
+//                  margin: EdgeInsets.only(top: 40.0),
+//                ),
+        Container(
+            margin: EdgeInsets.only(bottom: 25.0, top: 60.0),
+            child: Text('Temperatura',
+                style: TextStyle(
+                    fontSize: 35.0,
+                    color: Color.fromRGBO(240, 240, 240, 1),
+                    fontWeight: FontWeight.bold))
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.51,
+          padding: EdgeInsets.only(top: 10.00, bottom: 10.00),
+          decoration: BoxDecoration(
+              color: colorTemp == null ? Colors.green : colorTemp,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Colors.black, width: 6)),
+          child: Column(
+            children: <Widget>[
+              Center(
+                  child: Text('${state ?? "..."}',
+                      style: TextStyle(
+                          fontSize: 50.0,
+                          color: Colors.black,
+                          fontFamily: 'DisplayR'),
+                      textAlign: TextAlign.center)),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 30.0, bottom: 20.0),
+          child: Container(
+              margin: EdgeInsets.only(
+                  bottom: marginVisitor == null ? 0 : marginVisitor),
+              child: Text(
+                '${stateVisitor ?? "..."}',
+                style: TextStyle(fontSize: 25.0, color: Colors.white),
+              )),
+        ),
+        Center(
+          child: contButtons ?? Container(),
+        )
+      ],
+    );
+  }
+
+  setFileProccesed() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString('accomplished', 'True');
+    print(sharedPreferences.getString('accomplished'));
+  }
 
   @override
   void dispose() {
@@ -196,58 +317,7 @@ class _NameformState extends State<RegisTempPage> {
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [Palette.primaryColor, Palette.primaryColor])),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-//                Container(
-//                  child: Image(
-//                    image: AssetImage('${imgToshow ?? "assets/loading.gif"}'),
-//                    width: 220,
-//                  ),
-//                  margin: EdgeInsets.only(top: 40.0),
-//                ),
-                Container(
-                    margin: EdgeInsets.only(bottom: 25.0, top: 60.0),
-                    child: Text('Temperatura',
-                        style: TextStyle(
-                            fontSize: 35.0,
-                            color: Color.fromRGBO(240, 240, 240, 1),
-                            fontWeight: FontWeight.bold))),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.51,
-                  padding: EdgeInsets.only(top: 10.00, bottom: 10.00),
-                  decoration: BoxDecoration(
-                      color: colorTemp == null ? Colors.green : colorTemp,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Colors.black, width: 6)),
-                  child: Column(
-                    children: <Widget>[
-                      Center(
-                          child: Text('${state ?? "..."}',
-                              style: TextStyle(
-                                  fontSize: 50.0,
-                                  color: Colors.black,
-                                  fontFamily: 'DisplayR'),
-                              textAlign: TextAlign.center)),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 30.0, bottom: 20.0),
-                  child: Container(
-                      margin: EdgeInsets.only(
-                          bottom: marginVisitor == null ? 0 : marginVisitor),
-                      child: Text(
-                        '${stateVisitor ?? "..."}',
-                        style: TextStyle(fontSize: 25.0, color: Colors.white),
-                      )),
-                ),
-                Center(
-                  child: contButtons ?? Container(),
-                )
-              ],
-            ),
+            child: state == null ? TempBad() : tempoOk()
           ),
         ],
       ),
@@ -291,4 +361,5 @@ class Storage {
     final file = await getlocalFile(sFile);
     return file.writeAsString("$data");
   }
+
 }

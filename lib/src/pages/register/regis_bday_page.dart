@@ -94,7 +94,7 @@ class _NameformState extends State<RegisterBdayPage> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(1990, 8),
+        firstDate: DateTime(1920, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)
       setState(() {

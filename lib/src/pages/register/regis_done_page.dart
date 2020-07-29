@@ -114,7 +114,7 @@ class _formState extends State<form> {
                 side: BorderSide(color: Colors.blue[600])
             ),
             onPressed: (){
-              Navigator.pushNamed(context,'register_name');
+              Navigator.pushNamed(context,'temp');
             },
           ),
           RaisedButton(
