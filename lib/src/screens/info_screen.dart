@@ -5,6 +5,7 @@ import 'package:park_control/config/styles.dart';
 import 'package:park_control/data/data.dart';
 import 'package:park_control/src/widgets/widgets.dart';
 
+
 class InfoScreen extends StatefulWidget {
   @override
   _InfoScreenState createState() => _InfoScreenState();
@@ -45,7 +46,7 @@ class _InfoScreenState extends State<InfoScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
                 'Info',
@@ -54,6 +55,7 @@ class _InfoScreenState extends State<InfoScreen> {
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -63,10 +65,21 @@ class _InfoScreenState extends State<InfoScreen> {
             children: <Widget>[
               SizedBox(height: screenHeight * 0.01),
               Text(
-                'Esta aplicación fue diseña por Datalejo. 2020 ©',
+                'Esta Aplicación permite realizar toma de temperatura y captura de información de ususarios con el fin de cumplir algunos los protocolos de seguridad impuestos por el gobierno nacional para el funcionamiento de locales comerciales.',
                 style: const TextStyle(
                   color: Palette.white,
                   fontSize: 15.0,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Container(
+                margin: EdgeInsets.only(top:30.0),
+                child: Text(
+                  'Datalejo 2020 ©',
+                  style: const TextStyle(
+                    color: Palette.white,
+                    fontSize: 15.0,
+                  ),
                 ),
               ),
               SizedBox(height: screenHeight * 0.03),

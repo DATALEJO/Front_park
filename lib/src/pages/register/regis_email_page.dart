@@ -53,6 +53,7 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
     if(response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       if(jsonResponse != null) {
+        setFileProccesed();
         Navigator.pushNamed(context,'register_done');
       }
     }
@@ -150,6 +151,12 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
         ),
       ],
     );
+  }
+
+  setFileProccesed() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString('accomplished', 'True');
+    print(sharedPreferences.getString('accomplished'));
   }
 
 

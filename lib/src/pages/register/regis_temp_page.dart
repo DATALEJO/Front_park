@@ -29,6 +29,7 @@ class RegisTempPage extends StatefulWidget {
 
 class TempPagArguments {
   final Map params;
+
   TempPagArguments(this.params);
 }
 
@@ -51,6 +52,16 @@ class _NameformState extends State<RegisTempPage> {
     _showFilesinDir();
   }
 
+  Future<bool> checkAccomplishedFile(String file) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var fileS = sharedPreferences.getString('idtemp');
+    var accomplished = sharedPreferences.getString('accomplished');
+    if (fileS == file && accomplished == 'True') {
+      return true;
+    }
+    return false;
+  }
+
   Future<List<dynamic>> _showFilesinDir() async {
     List<dynamic> dataToSend;
     var dir = await getExternalStorageDirectory();
@@ -70,56 +81,72 @@ class _NameformState extends State<RegisTempPage> {
         pathToAdd = pathToAdd.replaceAll('.txt', '');
         pathList.add(pathToAdd);
       }).onDone(() async {
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
         print(pathList);
-        print('DOne');
         //Modifica la vista para mostrar los datos de temperatura
         String fileStr = getLastFile();
-        print('ARCHIVO: $fileStr');
-        sharedPreferences.setString("idtemp", fileStr);
-        widget.storage.readData(fileStr).then((str) {
-          sharedPreferences.setString("vtemp", str);
-          setState(() {
-            print(str.runtimeType);
-            state = '${str.trim()}°';
-            stateVisitor =
-                double.parse(str) >= 38.0 ? 'NO ADMITIDO' : 'ADMITIDO';
-            visitorAllowed = double.parse(str) >= 38.0 ? 'False' : 'True';
-            marginVisitor = double.parse(str) >= 38.0 ? 330.0 : 0.0;
-            colorTemp = double.parse(str) >= 38.0 ? Colors.red : Colors.green;
-            imgToshow = double.parse(str) >= 38.0
-                ? "assets/denied_visitor.png"
-                : "assets/regis_done.png";
-            contButtons = double.parse(str) >= 38.0
-                ? Container()
-                : Container(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          margin: EdgeInsets.only(bottom: 300.0),
-                          child: RaisedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, 'register_name', arguments: TempPagArguments(createInitialParams({'allowed':visitorAllowed, 'value':double.parse(str.trim())})));
-                            },
-                            padding: EdgeInsets.all(15.0),
-                            color: Color.fromRGBO(10, 131, 194, 0.7),
-                            child: Text(
-                              'Registrar Visitante',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-          });
+        checkAccomplishedFile(fileStr).then((check) {
+          if (check) {
+            print('EXECUTED: El archivo ya fue ejectuado');
+          } else {
+            checkTemperature(fileStr);
+          }
         });
       });
     });
     return dataToSend;
+  }
+
+  Future<void> checkTemperature(fileStr) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    widget.storage.readData(fileStr).then((str) {
+      sharedPreferences.setString("vtemp", str);
+      setState(() {
+        print(str.runtimeType);
+        state = '${str.trim()}°';
+        stateVisitor =
+        double.parse(str) >= 38.0 ? 'NO ADMITIDO' : 'ADMITIDO';
+        visitorAllowed = double.parse(str) >= 38.0 ? 'False' : 'True';
+        marginVisitor = double.parse(str) >= 38.0 ? 330.0 : 0.0;
+        colorTemp = double.parse(str) >= 38.0 ? Colors.red : Colors.green;
+        imgToshow = double.parse(str) >= 38.0
+            ? "assets/denied_visitor.png"
+            : "assets/regis_done.png";
+        contButtons = double.parse(str) >= 38.0
+            ? Container()
+            : Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                margin: EdgeInsets.only(bottom: 300.0),
+                child: RaisedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'register_name',
+                        arguments: TempPagArguments(
+                            createInitialParams({
+                              'allowed': visitorAllowed,
+                              'value': double.parse(str.trim())
+                            })));
+                  },
+                  padding: EdgeInsets.all(15.0),
+                  color: Color.fromRGBO(10, 131, 194, 0.7),
+                  child: Text(
+                    'Registrar Visitante',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      });
+    });
+    print('ARCHIVO: $fileStr');
+    sharedPreferences.setString("idtemp", fileStr);
+    sharedPreferences.setString("accomplished", 'False');
   }
 
   String getLastFile() {
@@ -227,15 +254,13 @@ class _NameformState extends State<RegisTempPage> {
     );
   }
 
-
   Map createInitialParams(Map data) {
     var newParams = {};
-    newParams['visit'] = {'allowed':data['allowed']};
+    newParams['visit'] = {'allowed': data['allowed']};
     newParams['visitor'] = {};
-    newParams['temperature_measure'] = {'value':data['value']};
+    newParams['temperature_measure'] = {'value': data['value']};
     return newParams;
   }
-
 }
 
 class Storage {
